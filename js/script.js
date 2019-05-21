@@ -1,3 +1,6 @@
+// import PubSub from 'pubsub-js'
+// const PubSub = require('pubsub-js');
+
 class Runner {
     constructor(bibNumber) {
         this.bibNumber = bibNumber;
@@ -7,6 +10,9 @@ class Runner {
     addLap() {
         let d = new Date();
         lapTimes.push(d);
+        // ----------------
+        PubSub.publish('Laptime', d);
+        // ----------------
     }
 }
 
@@ -28,4 +34,13 @@ class Stadium {
 let myStadium = new Stadium('Olympisch Stadion', 'Amsterdam', 10000);
 myStadium.createCompetitors(8);
 // competitors [0..7]
-console.log(myStadium.competitors[7].bibNumber);
+// console.log(myStadium.competitors[7].bibNumber);
+
+// Test to see if PubSub actually works. It does!!!
+var mySubscriber = function (msg, data) {
+    console.log( msg, data );
+};
+
+var token = PubSub.subscribe('MY TOPIC', mySubscriber);
+
+PubSub.publish('MY TOPIC', 'hello world!');
