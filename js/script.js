@@ -10,7 +10,7 @@ class Runner {
     addLap() {
         let d = new Date();
         this.lapTimes.push(d);
-        PubSub.publish('Laptime', d);
+        PubSub.publish('Laptime', [this.bibNumber, d]);
     }
 }
 
@@ -22,7 +22,7 @@ class Stadium {
         this.competitors = [];
     }
 
-    createCompetitors(n){
+    createCompetitors(n) {
         for (let i = 1; i <= n; i++) {
             this.competitors.push(new Runner(i));
         }
@@ -35,8 +35,8 @@ myStadium.createCompetitors(8);
 // console.log(myStadium.competitors[7].bibNumber);
 
 
-var mySubscriber = function (msg, data) {
-    console.log( msg, data );
+var mySubscriber = function (msg, arr) {
+    console.log(msg, arr[0], arr[1]);
 };
 
 var token = PubSub.subscribe('Laptime', mySubscriber);
