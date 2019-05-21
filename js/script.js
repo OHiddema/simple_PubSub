@@ -9,10 +9,8 @@ class Runner {
 
     addLap() {
         let d = new Date();
-        lapTimes.push(d);
-        // ----------------
+        this.lapTimes.push(d);
         PubSub.publish('Laptime', d);
-        // ----------------
     }
 }
 
@@ -36,11 +34,10 @@ myStadium.createCompetitors(8);
 // competitors [0..7]
 // console.log(myStadium.competitors[7].bibNumber);
 
-// Test to see if PubSub actually works. It does!!!
+
 var mySubscriber = function (msg, data) {
     console.log( msg, data );
 };
 
-var token = PubSub.subscribe('MY TOPIC', mySubscriber);
-
-PubSub.publish('MY TOPIC', 'hello world!');
+var token = PubSub.subscribe('Laptime', mySubscriber);
+myStadium.competitors[0].addLap();
