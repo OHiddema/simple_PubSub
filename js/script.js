@@ -9,7 +9,7 @@ class Runner {
     addLap() {
         let d = new Date().getTime();  //time in milliseconds since 1-1-1970
         this.lapTimes.push(d);
-        PubSub.publish('Laptime', [this.name, this.bibNumber, this.lapTimes]);
+        PubSub.publish('Laptime', {name:this.name, bib:this.bibNumber, timestamp:d});
     }
 }
 
@@ -36,9 +36,8 @@ athlete.push(new Runner(8, 'Wyclife Kinyamal'));
 
 var subscriber = {
     subscribe: function() {
-        var mySubscriber = function (msg, arr) {
-            var lastLap = arr[2][arr[2].length-1];
-            console.log(msg, arr[0], arr[1], lastLap);
+        var mySubscriber = function (msg, data) {
+            console.log(msg, data.name, data.bib, data.timestamp);
         };
     var token = PubSub.subscribe('Laptime', mySubscriber);
     }
