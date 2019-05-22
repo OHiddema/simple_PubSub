@@ -26,8 +26,17 @@ athlete.push(new Runner(8, 'Wyclife Kinyamal'));
 
 var subscriber = {
     subscribe: function() {
+        var lapTime;
+        lastLaptimes = [];
         var mySubscriber = function (msg, data) {
-            console.log(msg, data.name, data.bib, data.timestamp);
+            if (typeof lastLaptimes[data.bib] === "undefined") {
+                lapTime = 0; //athlete has started
+                console.log(msg, data.name +  ' has started');
+            } else {
+                lapTime = data.timestamp - lastLaptimes[data.bib];
+                console.log(msg, data.name, data.bib, lapTime);
+            }
+            lastLaptimes[data.bib] = data.timestamp;
         };
     var token = PubSub.subscribe('Laptime', mySubscriber);
     }
