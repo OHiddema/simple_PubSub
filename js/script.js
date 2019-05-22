@@ -24,6 +24,7 @@ athlete.push(new Runner(6, 'Cornelius Tuwei'));
 athlete.push(new Runner(7, 'Adam Kszczot'));
 athlete.push(new Runner(8, 'Wyclife Kinyamal'));
 
+// Subscriber object
 var subscriber = {
     subscribe: function () {
         var lapTime;
@@ -31,6 +32,9 @@ var subscriber = {
         lastLaptimes = [];
         startTimes = [];
         var mySubscriber = function (msg, data) {
+
+            var grid, newDiv, node;
+
             if (typeof lastLaptimes[data.bib] === "undefined") {
                 console.log('bibnr ' + data.bib + ' has started');
                 startTimes[data.bib] = data.timestamp;
@@ -38,6 +42,29 @@ var subscriber = {
                 lapTime = data.timestamp - lastLaptimes[data.bib];
                 totalTime = data.timestamp - startTimes[data.bib];
                 console.log('bibnr: ' + data.bib, 'lap time: ' + lapTime, 'total time: ' + totalTime);
+
+                grid = document.getElementById('grid-container');
+
+                newDiv = document.createElement('div');
+                node = document.createTextNode(data.bib);
+                newDiv.appendChild(node);
+                grid.appendChild(newDiv);
+
+                newDiv = document.createElement('div');
+                node = document.createTextNode(data.name);
+                newDiv.appendChild(node);
+                grid.appendChild(newDiv);
+
+                newDiv = document.createElement('div');
+                node = document.createTextNode(lapTime);
+                newDiv.appendChild(node);
+                grid.appendChild(newDiv);
+
+                newDiv = document.createElement('div');
+                node = document.createTextNode(totalTime);
+                newDiv.appendChild(node);
+                grid.appendChild(newDiv);
+
             }
             lastLaptimes[data.bib] = data.timestamp;
         };
@@ -47,32 +74,18 @@ var subscriber = {
 
 subscriber.subscribe();
 
-// var myLoop = setInterval(addlapForAll, 2000);
-// var lapCounter = 0;
-
-// function addlapForAll() {
-//     for (let i=0; i< athlete.length; i++) {
-//         athlete[i].addLap();
-//     }
-//     lapCounter++;
-//     if (lapCounter>2) {clearInterval(myLoop)}
-// }
-
 function startMatch() {
     function getRandomInterval(min, max) {
         return Math.random() * (max - min) + min;
-    }
-    
+    }    
     // the athletes start
     for (let i = 0; i < athlete.length; i++) {
         setTimeout(function () { athlete[i].addLap() }, 0);
     }
-    
     // first round
     for (let i = 0; i < athlete.length; i++) {
         setTimeout(function () { athlete[i].addLap() }, getRandomInterval(1500, 2500));
     }
-    
     // second round
     for (let i = 0; i < athlete.length; i++) {
         setTimeout(function () { athlete[i].addLap() }, getRandomInterval(3000, 5000));
