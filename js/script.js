@@ -24,16 +24,6 @@ athlete.push(new Runner(6, 'Cornelius Tuwei'));
 athlete.push(new Runner(7, 'Adam Kszczot'));
 athlete.push(new Runner(8, 'Wyclife Kinyamal'));
 
-
-// var mySubscriber = function (msg, arr) {
-//     var lastLap = arr[2][arr[2].length-1];
-//     console.log(msg, arr[0], arr[1], lastLap);
-// };
-
-// var token = PubSub.subscribe('Laptime', mySubscriber);
-
-// ---------------------------------------------------------------------------------
-
 var subscriber = {
     subscribe: function() {
         var mySubscriber = function (msg, data) {
@@ -45,6 +35,14 @@ var subscriber = {
 
 subscriber.subscribe();
 
-for (let i=0; i< athlete.length; i++) {
-    athlete[i].addLap();
+
+var myLoop = setInterval(addlapForAll, 2000);
+var lapCounter = 0;
+
+function addlapForAll() {
+    for (let i=0; i< athlete.length; i++) {
+        athlete[i].addLap();
+    }
+    lapCounter++;
+    if (lapCounter>2) {clearInterval(myLoop)}
 }
