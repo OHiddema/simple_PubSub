@@ -1,3 +1,4 @@
+// Runners are Publishers
 class Runner {
     constructor(bibNumber, name) {
         this.name = name;
@@ -6,9 +7,9 @@ class Runner {
     }
 
     addLap() {
-        let d = new Date();
+        let d = new Date().getTime();  //time in milliseconds since 1-1-1970
         this.lapTimes.push(d);
-        PubSub.publish('Laptime', [this.name, this.bibNumber, d]);
+        PubSub.publish('Laptime', [this.name, this.bibNumber, this.lapTimes]);
     }
 }
 
@@ -24,11 +25,26 @@ athlete.push(new Runner(7, 'Adam Kszczot'));
 athlete.push(new Runner(8, 'Wyclife Kinyamal'));
 
 
-var mySubscriber = function (msg, arr) {
-    console.log(msg, arr[0], arr[1], arr[2]);
-};
+// var mySubscriber = function (msg, arr) {
+//     var lastLap = arr[2][arr[2].length-1];
+//     console.log(msg, arr[0], arr[1], lastLap);
+// };
 
-var token = PubSub.subscribe('Laptime', mySubscriber);
+// var token = PubSub.subscribe('Laptime', mySubscriber);
+
+// ---------------------------------------------------------------------------------
+
+var subscriber = {
+    subscribe: function() {
+        var mySubscriber = function (msg, arr) {
+            var lastLap = arr[2][arr[2].length-1];
+            console.log(msg, arr[0], arr[1], lastLap);
+        };
+    var token = PubSub.subscribe('Laptime', mySubscriber);
+    }
+}
+
+subscriber.subscribe();
 
 for (let i=0; i< athlete.length; i++) {
     athlete[i].addLap();
