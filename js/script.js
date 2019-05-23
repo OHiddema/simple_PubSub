@@ -85,45 +85,37 @@ function startMatch() {
 
     // first round
     for (let i = 0; i < athletes.length; i++) {
-        setTimeout(function () { athletes[i].addLap() }, getRandomInterval(2500, 3500));
+        setTimeout(function () { athletes[i].addLap() }, getRandomInterval(1000, 2000));
     }
 
     // second round
     for (let i = 0; i < athletes.length; i++) {
-        setTimeout(function () { athletes[i].addLap() }, getRandomInterval(5500, 6500));
+        setTimeout(function () { athletes[i].addLap() }, getRandomInterval(3000, 4000));
     }
 }
 
 // Define a second subscriber
 var subscriberResults = {
     subscribe: function () {
-        // var lapTime;
-        // var totalTime;
-        var countFinished = 0;
+        var countFinished = 0;  //number of athletes that have finished the race
         var timestampFirstFinished = 0;
         var timeGap = 0;
-        lastLaptimes = [];
         startTimes = [];
         countLaps = [];
         var mySubscriber = function (msg, data) {
-
-            // var grid, newDiv, node;
-
             if (typeof countLaps[data.bib] === "undefined") {
                 startTimes[data.bib] = data.timestamp;
                 countLaps[data.bib] = 0;
             } else {
                 if (countLaps[data.bib] == 1) { //athlete reaches finish
-                    if (countFinished == 0) {
-                        // first athlete finishes
+                    if (countFinished == 0) { //first athlete finishes                        
                         timestampFirstFinished = data.timestamp;
                         timeGap = 0;
                     } else {
                         timeGap = data.timestamp -timestampFirstFinished;
                     }
                     countFinished++;
-                    // output data to screen
-                    console.log(countFinished, data.bib, data.name, data.timestamp-startTimes[data.bib], timeGap);
+                    console.log(countFinished, data.name, data.timestamp-startTimes[data.bib], timeGap);
                 } else {
                     countLaps[data.bib]++;
                 }
