@@ -13,7 +13,7 @@ Simple PubSub with:
 start/finish line)
 - one Subcriber (a display that processes the receiced data an then displays it).
 
-The subscriber calcultes:
+The subscriber calcultes: 
   - the last lap time of an athlete that passes the start/finish line
   - the total time since the start of an athlete that passes the start/finish line
 
@@ -36,3 +36,4 @@ How to implement step 4:
  - DRY coding; some codebloks are repeated twice (with different parameters)
  - Use MAP-object
  - Use Facory
+ - More than one publisher

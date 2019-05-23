@@ -9,7 +9,16 @@ class Runner {
     addLap() {
         let d = new Date().getTime();  //time in milliseconds since 1-1-1970
         this.lapTimes.push(d);
-        PubSub.publish('Laptime', { name: this.name, bib: this.bibNumber, timestamp: d });
+
+        // create MAP object
+        let myMap = new Map();
+        myMap.set('name', this.name);
+        myMap.set('bib', this.bibNumber);
+        myMap.set('timestamp', d);
+        PubSub.publish('Laptime', myMap);
+        // myMap.clear();
+
+        // PubSub.publish('Laptime', { name: this.name, bib: this.bibNumber, timestamp: d });
     }
 }
 
@@ -31,25 +40,29 @@ var subscriber = {
         var totalTime;
         lastLaptimes = [];
         startTimes = [];
-        var mySubscriber = function (msg, data) {
+        var mySubscriber = function (msg, map) {
+
+            let name = map.get('name');
+            let bib = map.get('bib');
+            let timestamp = map.get('timestamp');
 
             var grid, newDiv, node;
 
-            if (typeof lastLaptimes[data.bib] === "undefined") {
-                startTimes[data.bib] = data.timestamp;
+            if (typeof lastLaptimes[bib] === "undefined") {
+                startTimes[bib] = timestamp;
             } else {
-                lapTime = data.timestamp - lastLaptimes[data.bib];
-                totalTime = data.timestamp - startTimes[data.bib];
+                lapTime = timestamp - lastLaptimes[bib];
+                totalTime = timestamp - startTimes[bib];
 
                 grid = document.getElementById('grid-container');
 
                 newDiv = document.createElement('div');
-                node = document.createTextNode(data.bib);
+                node = document.createTextNode(bib);
                 newDiv.appendChild(node);
                 grid.appendChild(newDiv);
 
                 newDiv = document.createElement('div');
-                node = document.createTextNode(data.name);
+                node = document.createTextNode(name);
                 newDiv.appendChild(node);
                 grid.appendChild(newDiv);
 
@@ -63,7 +76,7 @@ var subscriber = {
                 newDiv.appendChild(node);
                 grid.appendChild(newDiv);
             }
-            lastLaptimes[data.bib] = data.timestamp;
+            lastLaptimes[bib] = timestamp;
         };
         var token = PubSub.subscribe('Laptime', mySubscriber);
     }
@@ -95,60 +108,60 @@ function startMatch() {
 }
 
 // Define a second subscriber
-var subscriberResults = {
-    subscribe: function () {
-        var countFinished = 0;  //number of athletes that have finished the race
-        var timestampFirstFinished = 0;
-        var timeGap = 0;
-        startTimes = [];
-        countLaps = [];
-        var mySubscriber = function (msg, data) {
+// var subscriberResults = {
+//     subscribe: function () {
+//         var countFinished = 0;  //number of athletes that have finished the race
+//         var timestampFirstFinished = 0;
+//         var timeGap = 0;
+//         startTimes = [];
+//         countLaps = [];
+//         var mySubscriber = function (msg, data) {
 
-            var grid, newDiv, node;
+//             var grid, newDiv, node;
 
-            if (typeof countLaps[data.bib] === "undefined") {
-                startTimes[data.bib] = data.timestamp;
-                countLaps[data.bib] = 0;
-            } else {
-                if (countLaps[data.bib] == 1) { //athlete reaches finish
-                    if (countFinished == 0) { //first athlete finishes                        
-                        timestampFirstFinished = data.timestamp;
-                        timeGap = 0;
-                    } else {
-                        timeGap = data.timestamp -timestampFirstFinished;
-                    }
-                    countFinished++;
+//             if (typeof countLaps[data.bib] === "undefined") {
+//                 startTimes[data.bib] = data.timestamp;
+//                 countLaps[data.bib] = 0;
+//             } else {
+//                 if (countLaps[data.bib] == 1) { //athlete reaches finish
+//                     if (countFinished == 0) { //first athlete finishes                        
+//                         timestampFirstFinished = data.timestamp;
+//                         timeGap = 0;
+//                     } else {
+//                         timeGap = data.timestamp -timestampFirstFinished;
+//                     }
+//                     countFinished++;
 
-                    // write output to grid in HTML file
-                    grid = document.getElementById('raceResults');
+//                     // write output to grid in HTML file
+//                     grid = document.getElementById('raceResults');
 
-                    newDiv = document.createElement('div');
-                    node = document.createTextNode(countFinished);
-                    newDiv.appendChild(node);
-                    grid.appendChild(newDiv);
+//                     newDiv = document.createElement('div');
+//                     node = document.createTextNode(countFinished);
+//                     newDiv.appendChild(node);
+//                     grid.appendChild(newDiv);
     
-                    newDiv = document.createElement('div');
-                    node = document.createTextNode(data.name);
-                    newDiv.appendChild(node);
-                    grid.appendChild(newDiv);
+//                     newDiv = document.createElement('div');
+//                     node = document.createTextNode(data.name);
+//                     newDiv.appendChild(node);
+//                     grid.appendChild(newDiv);
     
-                    newDiv = document.createElement('div');
-                    node = document.createTextNode(data.timestamp-startTimes[data.bib]);
-                    newDiv.appendChild(node);
-                    grid.appendChild(newDiv);
+//                     newDiv = document.createElement('div');
+//                     node = document.createTextNode(data.timestamp-startTimes[data.bib]);
+//                     newDiv.appendChild(node);
+//                     grid.appendChild(newDiv);
     
-                    newDiv = document.createElement('div');
-                    node = document.createTextNode(timeGap);
-                    newDiv.appendChild(node);
-                    grid.appendChild(newDiv);
-                } else {
-                    countLaps[data.bib]++;
-                }
-            }
-        };
-        var token = PubSub.subscribe('Laptime', mySubscriber);
-    }
-}
+//                     newDiv = document.createElement('div');
+//                     node = document.createTextNode(timeGap);
+//                     newDiv.appendChild(node);
+//                     grid.appendChild(newDiv);
+//                 } else {
+//                     countLaps[data.bib]++;
+//                 }
+//             }
+//         };
+//         var token = PubSub.subscribe('Laptime', mySubscriber);
+//     }
+// }
 
 // The subscriber subscribes :-)
-subscriberResults.subscribe();
+// subscriberResults.subscribe();
