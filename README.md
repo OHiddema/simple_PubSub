@@ -32,8 +32,12 @@ How to implement step 4:
  - Race ends at 2 laps. When first athlete reaches 2 laps, save its finish time,
  to calculate the gaps of the other athletes.
 
- Possible next steps:
- - DRY coding; some codebloks are repeated twice (with different parameters)
- - Use MAP-object
- - Use Facory
- - More than one publisher
+Step 5:
+- Conversion from associative arrays to MAP objects.
+
+Read about the factory pattern: https://alligator.io/js/factory-pattern/
+- Conclusion: the use of this pattern is not needed in this case, because every athlete that is created has the same properties and methods.
+
+Possible next steps:
+- DRY coding; some codebloks are repeated twice (with different parameters)
+- More than one publisher

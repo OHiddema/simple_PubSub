@@ -1,3 +1,12 @@
+// creates a filled div element in a grid
+function createDiv(gridName, node) {
+    grid = document.getElementById(gridName);
+    newDiv = document.createElement('div');
+    node = document.createTextNode(node);
+    newDiv.appendChild(node);
+    grid.appendChild(newDiv);
+}
+
 // Runners are Publishers
 class Runner {
     constructor(bibNumber, name) {
@@ -35,45 +44,24 @@ var subscriber = {
     subscribe: function () {
         var lapTime;
         var totalTime;
-
         let lastLaptimes = new Map();
         let startTimes = new Map();
 
         var mySubscriber = function (msg, map) {
-
             let name = map.get('name');
             let bib = map.get('bib');
             let timestamp = map.get('timestamp');
-
-            var grid, newDiv, node;
+            let gridName = 'grid-container';
 
             if (typeof lastLaptimes.get(bib) === "undefined") {
                 startTimes.set(bib, timestamp);
             } else {
                 lapTime = timestamp - lastLaptimes.get(bib);
                 totalTime = timestamp - startTimes.get(bib);
-
-                grid = document.getElementById('grid-container');
-
-                newDiv = document.createElement('div');
-                node = document.createTextNode(bib);
-                newDiv.appendChild(node);
-                grid.appendChild(newDiv);
-
-                newDiv = document.createElement('div');
-                node = document.createTextNode(name);
-                newDiv.appendChild(node);
-                grid.appendChild(newDiv);
-
-                newDiv = document.createElement('div');
-                node = document.createTextNode(lapTime);
-                newDiv.appendChild(node);
-                grid.appendChild(newDiv);
-
-                newDiv = document.createElement('div');
-                node = document.createTextNode(totalTime);
-                newDiv.appendChild(node);
-                grid.appendChild(newDiv);
+                createDiv(gridName, bib);
+                createDiv(gridName, name);
+                createDiv(gridName, lapTime);
+                createDiv(gridName, totalTime);
             }
             lastLaptimes.set(bib, timestamp);
         };
@@ -112,20 +100,15 @@ var subscriberResults = {
         var countFinished = 0;  //number of athletes that have finished the race
         var timestampFirstFinished = 0;
         var timeGap = 0;
-
         let startTimes = new Map();
         let countLaps = new Map();
-        // startTimes = [];
-        // countLaps = [];
-        var mySubscriber = function (msg, map) {
 
+        var mySubscriber = function (msg, map) {
             let name = map.get('name');
             let bib = map.get('bib');
             let timestamp = map.get('timestamp');
+            let gridName = 'raceResults';
 
-            var grid, newDiv, node;
-
-            // if (typeof countLaps[bib] === "undefined") {
             if (typeof countLaps.get(bib) === "undefined") {
                 startTimes.set(bib, timestamp);
                 countLaps.set(bib, 0);
@@ -138,31 +121,11 @@ var subscriberResults = {
                         timeGap = timestamp - timestampFirstFinished;
                     }
                     countFinished++;
-
-                    // write output to grid in HTML file
-                    grid = document.getElementById('raceResults');
-
-                    newDiv = document.createElement('div');
-                    node = document.createTextNode(countFinished);
-                    newDiv.appendChild(node);
-                    grid.appendChild(newDiv);
-
-                    newDiv = document.createElement('div');
-                    node = document.createTextNode(name);
-                    newDiv.appendChild(node);
-                    grid.appendChild(newDiv);
-
-                    newDiv = document.createElement('div');
-                    node = document.createTextNode(timestamp - startTimes.get(bib));
-                    newDiv.appendChild(node);
-                    grid.appendChild(newDiv);
-
-                    newDiv = document.createElement('div');
-                    node = document.createTextNode(timeGap);
-                    newDiv.appendChild(node);
-                    grid.appendChild(newDiv);
+                    createDiv(gridName, countFinished);
+                    createDiv(gridName, name);
+                    createDiv(gridName, timestamp - startTimes.get(bib));
+                    createDiv(gridName, timeGap);
                 } else {
-                    // countLaps[bib]++;
                     countLaps.set(bib, countLaps.get(bib)+1);
                 }
             }
@@ -173,3 +136,4 @@ var subscriberResults = {
 
 // The subscriber subscribes :-)
 subscriberResults.subscribe();
+
