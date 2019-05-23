@@ -35,8 +35,10 @@ var subscriber = {
     subscribe: function () {
         var lapTime;
         var totalTime;
-        lastLaptimes = [];
-        startTimes = [];
+
+        let lastLaptimes = new Map();
+        let startTimes = new Map();
+
         var mySubscriber = function (msg, map) {
 
             let name = map.get('name');
@@ -45,11 +47,11 @@ var subscriber = {
 
             var grid, newDiv, node;
 
-            if (typeof lastLaptimes[bib] === "undefined") {
-                startTimes[bib] = timestamp;
+            if (typeof lastLaptimes.get(bib) === "undefined") {
+                startTimes.set(bib, timestamp);
             } else {
-                lapTime = timestamp - lastLaptimes[bib];
-                totalTime = timestamp - startTimes[bib];
+                lapTime = timestamp - lastLaptimes.get(bib);
+                totalTime = timestamp - startTimes.get(bib);
 
                 grid = document.getElementById('grid-container');
 
@@ -73,7 +75,7 @@ var subscriber = {
                 newDiv.appendChild(node);
                 grid.appendChild(newDiv);
             }
-            lastLaptimes[bib] = timestamp;
+            lastLaptimes.set(bib, timestamp);
         };
         var token = PubSub.subscribe('Laptime', mySubscriber);
     }
@@ -129,7 +131,7 @@ var subscriberResults = {
                         timestampFirstFinished = timestamp;
                         timeGap = 0;
                     } else {
-                        timeGap = timestamp -timestampFirstFinished;
+                        timeGap = timestamp - timestampFirstFinished;
                     }
                     countFinished++;
 
@@ -140,17 +142,17 @@ var subscriberResults = {
                     node = document.createTextNode(countFinished);
                     newDiv.appendChild(node);
                     grid.appendChild(newDiv);
-    
+
                     newDiv = document.createElement('div');
                     node = document.createTextNode(name);
                     newDiv.appendChild(node);
                     grid.appendChild(newDiv);
-    
+
                     newDiv = document.createElement('div');
-                    node = document.createTextNode(timestamp-startTimes[bib]);
+                    node = document.createTextNode(timestamp - startTimes[bib]);
                     newDiv.appendChild(node);
                     grid.appendChild(newDiv);
-    
+
                     newDiv = document.createElement('div');
                     node = document.createTextNode(timeGap);
                     newDiv.appendChild(node);
