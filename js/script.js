@@ -33,8 +33,6 @@ var subscriber = {
         startTimes = [];
         var mySubscriber = function (msg, data) {
 
-            // console.log('Test first');
-
             var grid, newDiv, node;
 
             if (typeof lastLaptimes[data.bib] === "undefined") {
@@ -97,14 +95,10 @@ function startMatch() {
 }
 
 // Define a second subscriber
-// - Save the start time of each athlete
-// - Keep track of the number of laps for each athlete
-// - Race ends at 2 laps. When first athlete reaches 2 laps, save its finish time,
-// to calculate the gaps of the other athletes.
 var subscriberResults = {
     subscribe: function () {
-        var lapTime;
-        var totalTime;
+        // var lapTime;
+        // var totalTime;
         var countFinished = 0;
         var timestampFirstFinished = 0;
         var timeGap = 0;
@@ -113,54 +107,27 @@ var subscriberResults = {
         countLaps = [];
         var mySubscriber = function (msg, data) {
 
-            var grid, newDiv, node;
-
-            console.log('Test!!!!');
+            // var grid, newDiv, node;
 
             if (typeof countLaps[data.bib] === "undefined") {
                 startTimes[data.bib] = data.timestamp;
                 countLaps[data.bib] = 0;
             } else {
-                if (countLaps[data.bib] == 2) { //athlete reaches finish
+                if (countLaps[data.bib] == 1) { //athlete reaches finish
                     if (countFinished == 0) {
                         // first athlete finishes
                         timestampFirstFinished = data.timestamp;
                         timeGap = 0;
                     } else {
-                        timegap = data.timestamp -timestampFirstFinished;
+                        timeGap = data.timestamp -timestampFirstFinished;
                     }
                     countFinished++;
-                    // output data to screes
-                    console.log(data.name +  ' Finished!');
+                    // output data to screen
+                    console.log(countFinished, data.bib, data.name, data.timestamp-startTimes[data.bib], timeGap);
                 } else {
                     countLaps[data.bib]++;
                 }
-                // lapTime = data.timestamp - lastLaptimes[data.bib];
-                // totalTime = data.timestamp - startTimes[data.bib];
-
-                // grid = document.getElementById('grid-container');
-
-                // newDiv = document.createElement('div');
-                // node = document.createTextNode(data.bib);
-                // newDiv.appendChild(node);
-                // grid.appendChild(newDiv);
-
-                // newDiv = document.createElement('div');
-                // node = document.createTextNode(data.name);
-                // newDiv.appendChild(node);
-                // grid.appendChild(newDiv);
-
-                // newDiv = document.createElement('div');
-                // node = document.createTextNode(lapTime);
-                // newDiv.appendChild(node);
-                // grid.appendChild(newDiv);
-
-                // newDiv = document.createElement('div');
-                // node = document.createTextNode(totalTime);
-                // newDiv.appendChild(node);
-                // grid.appendChild(newDiv);
             }
-            lastLaptimes[data.bib] = data.timestamp;
         };
         var token = PubSub.subscribe('Laptime', mySubscriber);
     }
