@@ -31,3 +31,8 @@ How to implement step 4:
  - Keep track of the number of laps for each athlete
  - Race ends at 2 laps. When first athlete reaches 2 laps, save its finish time,
  to calculate the gaps of the other athletes.
+
+ Possible next steps:
+ - DRY coding; some codebloks are repeated twice (with different parameters)
+ - Use MAP-object
+ - Use Facory

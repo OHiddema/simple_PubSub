@@ -103,6 +103,9 @@ var subscriberResults = {
         startTimes = [];
         countLaps = [];
         var mySubscriber = function (msg, data) {
+
+            var grid, newDiv, node;
+
             if (typeof countLaps[data.bib] === "undefined") {
                 startTimes[data.bib] = data.timestamp;
                 countLaps[data.bib] = 0;
@@ -115,7 +118,29 @@ var subscriberResults = {
                         timeGap = data.timestamp -timestampFirstFinished;
                     }
                     countFinished++;
-                    console.log(countFinished, data.name, data.timestamp-startTimes[data.bib], timeGap);
+
+                    // write output to grid in HTML file
+                    grid = document.getElementById('raceResults');
+
+                    newDiv = document.createElement('div');
+                    node = document.createTextNode(countFinished);
+                    newDiv.appendChild(node);
+                    grid.appendChild(newDiv);
+    
+                    newDiv = document.createElement('div');
+                    node = document.createTextNode(data.name);
+                    newDiv.appendChild(node);
+                    grid.appendChild(newDiv);
+    
+                    newDiv = document.createElement('div');
+                    node = document.createTextNode(data.timestamp-startTimes[data.bib]);
+                    newDiv.appendChild(node);
+                    grid.appendChild(newDiv);
+    
+                    newDiv = document.createElement('div');
+                    node = document.createTextNode(timeGap);
+                    newDiv.appendChild(node);
+                    grid.appendChild(newDiv);
                 } else {
                     countLaps[data.bib]++;
                 }

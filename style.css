@@ -1,4 +1,4 @@
-#grid-container {
+#grid-container, #raceResults {
     display: grid;
     grid-template-columns: 1fr 5fr 3fr 3fr;
     grid-gap: 1px;
@@ -6,7 +6,7 @@
     padding: 3px;
   }
   
-  #grid-container > div {
+  #grid-container > div, #raceResults > div {
     background-color: rgba(255, 255, 255, 0.8);
     text-align: center;
     padding: 2px;
@@ -18,7 +18,7 @@
       font-size: 1.2em;
   }
 
-  #startBtnDiv {
+  #centerDiv {
     text-align: center;
   }
 

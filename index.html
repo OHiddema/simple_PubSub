@@ -16,14 +16,25 @@
 </head>
 
 <body>
-    <div id='startBtnDiv'><input class='myButton' type="button" value="Start match" onclick='startMatch()'></div>
-    <br>
+    <div id='centerDiv'><input class='myButton' type="button" value="Start match" onclick='startMatch()'></div>
+
+    <div id='centerDiv'><h3>Lap results</h3></div>
 
     <div id="grid-container">
         <div class='toprow'>Bibnr.</div>
         <div class='toprow'>Name</div>
         <div class='toprow'>Lap time [ms]</div>
         <div class='toprow'>Total time [ms]</div>
+    </div>
+
+    <div id='centerDiv'><h3>Final Results</h3></div>
+
+    <div id='raceResults'>
+        <div class='toprow'>Pos.</div>
+        <div class='toprow'>Name</div>
+        <div class='toprow'>Time [ms]</div>
+        <div class='toprow'>Gap [ms]</div>
+    </div>
 </body>
 
 </html>
