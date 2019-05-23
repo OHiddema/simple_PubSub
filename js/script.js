@@ -112,8 +112,11 @@ var subscriberResults = {
         var countFinished = 0;  //number of athletes that have finished the race
         var timestampFirstFinished = 0;
         var timeGap = 0;
-        startTimes = [];
-        countLaps = [];
+
+        let startTimes = new Map();
+        let countLaps = new Map();
+        // startTimes = [];
+        // countLaps = [];
         var mySubscriber = function (msg, map) {
 
             let name = map.get('name');
@@ -122,11 +125,12 @@ var subscriberResults = {
 
             var grid, newDiv, node;
 
-            if (typeof countLaps[bib] === "undefined") {
-                startTimes[bib] = timestamp;
-                countLaps[bib] = 0;
+            // if (typeof countLaps[bib] === "undefined") {
+            if (typeof countLaps.get(bib) === "undefined") {
+                startTimes.set(bib, timestamp);
+                countLaps.set(bib, 0);
             } else {
-                if (countLaps[bib] == 1) { //athlete reaches finish
+                if (countLaps.get(bib) == 1) { //athlete reaches finish
                     if (countFinished == 0) { //first athlete finishes                        
                         timestampFirstFinished = timestamp;
                         timeGap = 0;
@@ -149,7 +153,7 @@ var subscriberResults = {
                     grid.appendChild(newDiv);
 
                     newDiv = document.createElement('div');
-                    node = document.createTextNode(timestamp - startTimes[bib]);
+                    node = document.createTextNode(timestamp - startTimes.get(bib));
                     newDiv.appendChild(node);
                     grid.appendChild(newDiv);
 
@@ -158,7 +162,8 @@ var subscriberResults = {
                     newDiv.appendChild(node);
                     grid.appendChild(newDiv);
                 } else {
-                    countLaps[bib]++;
+                    // countLaps[bib]++;
+                    countLaps.set(bib, countLaps.get(bib)+1);
                 }
             }
         };
