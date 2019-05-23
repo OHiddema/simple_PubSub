@@ -16,7 +16,6 @@ class Runner {
         myMap.set('bib', this.bibNumber);
         myMap.set('timestamp', d);
         PubSub.publish('Laptime', myMap);
-        // myMap.clear();
 
         // PubSub.publish('Laptime', { name: this.name, bib: this.bibNumber, timestamp: d });
     }
