@@ -26,3 +26,8 @@ Athlete name        Time  Gap
 3. Cornelius Tuwei  893   5
 etc... 
 
+How to implement step 4:
+ - Save the start time of each athlete
+ - Keep track of the number of laps for each athlete
+ - Race ends at 2 laps. When first athlete reaches 2 laps, save its finish time,
+ to calculate the gaps of the other athletes.
